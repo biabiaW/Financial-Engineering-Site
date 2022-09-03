@@ -1,16 +1,119 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    <title>LU-MSFE</title>
-    <meta name="description" content="Lehigh University Masters in Financial Engineering">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Getting Started with Chart JS with www.chartjs3.com</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      .chartMenu {
+        width: 100vw;
+        height: 40px;
+        background: #1A1A1A;
+        color: rgba(255, 26, 104, 1);
+      }
+      .chartMenu p {
+        padding: 10px;
+        font-size: 20px;
+      }
+      .chartCard {
+        width: 100vw;
+        height: calc(100vh - 40px);
+        background: Green;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .chartBox {
+        width: 900px;
+        padding: 20px;
+        border-radius: 20px;
+        border: solid 3px rgba(255, 26, 104, 1);
+        background: white;
+      }
+    </style>
   </head>
   <body>
-    <p>Hello World!</p>
-    <input type="file" id="uploadfile" accept=".csv">
-    <button id="uploadconfirm"> Upload File</button>
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
-    <p>Hello World!</p>
-    <p id ="demo"></p>
-    <script src ="csv2array.js"></script>
+    <p>Data that own me a night of sleep!</p>
+    <div class="chartCard">
+      <div class="chartBox">
+        <canvas id="myChart"></canvas>
+      </div>
+    </div>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    drawChart();
+    async function drawChart(){
+      const datapoints = await getData();
+      const data = {
+        labels: datapoints.myDate,
+        datasets: [{
+          label: 'Test_CSV_file',
+          data: datapoints.myValues,
+          backgroundColor: [
+            'rgba(255, 26, 104, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(0, 0, 0, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255, 26, 104, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(0, 0, 0, 1)'
+          ],
+          tension: 0.4
+        }]
+      };
+      const config = {
+        type: 'line',
+        data,
+        options: {
+          elements: {
+            point:{
+                radius: 0
+            }
+          },
+          scales: {
+            y: {
+              suggestedMin: 900,
+              suggestedMax: 1100,
+            }
+          }
+        }
+      };
+      const myChart = new Chart(
+        document.getElementById('myChart'),
+        config);
+    };
+    async function getData(){
+      const myDate = [];
+      const myValues = [];
+      const response = await fetch('input.csv');
+      const datapoints = await response.text();
+      const table = datapoints.split('\n');
+      table.forEach(row => {
+        const mycolumn = row.split(',');
+        const myd = mycolumn[0];
+        const myv = mycolumn[1];
+        myDate.push(myd);
+        myValues.push(myv);
+
+      });
+      myDate.shift();
+      myValues.shift();
+      return {myDate, myValues};
+    }
+    </script>
   </body>
 </html>
