@@ -1,18 +1,16 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>LU-MSFE</title>
     <meta name="description" content="Lehigh University Masters in Financial Engineering">
   </head>
   <body>
-
+    <p>Hello World!</p>
+    <input type="file" id="uploadfile" accept=".csv">
+    <button id="uploadconfirm"> Upload File</button>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+    <p>Hello World!</p>
+    <p id ="demo"></p>
+    <script src ="csv2array.js"></script>
   </body>
-  <script>
-    console.log(data);
-    data = data.split("\r\n");
-    for (let i in data) {
-      data[i] = data[i].split(",");
-    }
-    console.log(data);
-  </script>
 </html>
