@@ -38,9 +38,15 @@
     </style>
   </head>
   <body>
-    <p>Data that own me a night of sleep!</p>
     <div class="chartCard">
       <div class="chartBox">
+        <button onclick="drawChart(5)">1W</button>
+        <button onclick="drawChart(8)">2W</button>
+        <button onclick="drawChart(23)">1M</button>
+        <button onclick="drawChart(130)">6M</button>
+        <button onclick="drawChart(254)">1Y</button>
+        <button onclick="drawChart(720)">5Y</button>
+        <button onclick="drawChart()">Full</button>
         <canvas id="myChart"></canvas>
       </div>
     </div>
@@ -48,7 +54,7 @@
     <script>
     drawChart();
     async function drawChart(){
-      const datapoints = await getData();
+      const datapoints = await getData(arguments[0]);
       const data = {
         labels: datapoints.myDate,
         datasets: [{
@@ -86,12 +92,16 @@
           },
           scales: {
             y: {
-              suggestedMin: 900,
-              suggestedMax: 1100,
+              suggestedMin: 980,
+              suggestedMax: 1020,
             }
           }
         }
       };
+      let chartStatus = Chart.getChart("myChart");
+      if (chartStatus != undefined) {
+          chartStatus.destroy();
+      }
       const myChart = new Chart(
         document.getElementById('myChart'),
         config);
@@ -102,13 +112,13 @@
       const response = await fetch('input.csv');
       const datapoints = await response.text();
       const table = datapoints.split('\n');
-      table.forEach(row => {
+      const newtable = table.slice(0,arguments[0]);
+      newtable.forEach(row => {
         const mycolumn = row.split(',');
         const myd = mycolumn[0];
         const myv = mycolumn[1];
         myDate.push(myd);
         myValues.push(myv);
-
       });
       myDate.shift();
       myValues.shift();
